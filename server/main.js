@@ -5,10 +5,11 @@ var setApi = require('./api')
 var setRouter = require('./router')
 var server = http.createServer(app)
 
-server.listen(3001, function() {
+let port = 3001;
+server.listen(port, function() {
   let host = server.address().address
   let port = server.address().port
-  console.log('example app listening at localhost://%s:%s', host, port)
+  console.log('Web Server listening at http://localhost:%s:%s', host, port)
 })
 
 setApi(app)

@@ -8,31 +8,39 @@ var upload = multer({ dest: './../static/uploads/'})
 
 checkPath(path.join(__dirname, './../static/uploads/'))
 
+/**
+ * @app  express
+ */
 module.exports = function(app) {
   app.use(bodyParse.json())
 
-  // 读取文件列表
+  /**
+   * 读取文件列表
+   */
   app.get('/getList', function (req, res) {
     getUploadList(function(list) {
       let result = {
         code: 200,
         data: list,
         msg: 'ok'
-      }
-      res.json(result)
+      };
+      res.json(result);
     })
-  })
+  });
 
-  // 删除图片
+  /**
+   * 删除图片
+   */
   app.post('/delImg', function(req, res) {
-    let file = req.body.pic.replace(/\/\/localhost:3001/, '')
+    let file = req.body.pic.replace(/\/\/localhost:3001/, '');
     file && fs.unlink(path.resolve(__dirname, './..' + file), function(error, data) {
-      res.json('ok')
+      res.json('ok');
     })
+  });
 
-  })
-
-  // 上传图片
+  /**
+   * 上传图片
+   */
   app.post('/uploadImg', upload.single('file'), function(req, res) {
     let  item = req.file
     let extName = item.originalname.match(/(\.[^\.]+)$/)[1]
@@ -40,13 +48,13 @@ module.exports = function(app) {
     let is = fs.createReadStream(item.path)
     let os = fs.createWriteStream(targetPath)
 
-    is.pipe(os)
+    is.pipe(os);
 
     is.on('end', function() {
       res.json({
         url: targetPath
       })
-    })
+    });
   })
 }
 
